@@ -82,9 +82,9 @@ export interface GalleryItem {
   id: string;
   title: string;
   caption: string;
-  category: 'Education' | 'Nutrition' | 'Volunteers' | 'Events' | 'Skill Development' | 'Children' | 'Community Programs';
+  category: string;
   imageUrl: string;
-  date: string;
+  date?: string;
   location?: string;
 }
 
@@ -98,7 +98,7 @@ export interface EventItem {
   description: string;
   seatsTotal?: number;
   seatsRemaining?: number;
-  imageUrl: string;
+  imageUrl?: string;
   status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
 }
 

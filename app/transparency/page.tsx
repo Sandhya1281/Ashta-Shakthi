@@ -11,6 +11,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { TRANSPARENCY_DOCUMENTS } from '@/lib/data';
+import CommunityPhotoFeature from '@/components/CommunityPhotoFeature';
 
 export const metadata = {
   title: 'Transparency & Governance | Astha Shakti',
@@ -38,6 +39,12 @@ export default function TransparencyPage() {
           </div>
         </div>
       </section>
+
+      <CommunityPhotoFeature
+        src="/images/community/img-20260921-wa0007.webp"
+        alt="Certificate of appreciation received by Astha Shakti"
+        caption="Recognition shared in the Astha Shakti photo archive."
+      />
 
       {/* Trust & Governance Cards */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

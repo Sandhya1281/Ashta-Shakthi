@@ -1,11 +1,29 @@
-import { VolunteerApplication, DonationRecord, ContactMessage, ImpactMetric, EventRegistration } from './types';
-import { INITIAL_IMPACT_METRICS } from './data';
+import { VolunteerApplication, DonationRecord, ContactMessage, ImpactMetric, EventRegistration, EventItem, GalleryItem } from './types';
+import { INITIAL_IMPACT_METRICS, UPCOMING_EVENTS, GALLERY_ITEMS } from './data';
 
 const VOLUNTEERS_KEY = 'astha_shakti_volunteers_v1';
 const DONATIONS_KEY = 'astha_shakti_donations_v1';
 const CONTACTS_KEY = 'astha_shakti_contacts_v1';
 const METRICS_KEY = 'astha_shakti_metrics_v1';
 const EVENT_REGS_KEY = 'astha_shakti_event_regs_v1';
+const EVENTS_KEY = 'astha_shakti_events_v1';
+const GALLERY_KEY = 'astha_shakti_gallery_v1';
+
+function isPastEvent(date: string): boolean {
+  const eventDate = new Date(date);
+  if (Number.isNaN(eventDate.getTime())) return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  eventDate.setHours(0, 0, 0, 0);
+  return eventDate < today;
+}
+
+function updateEventStatuses(events: EventItem[]): EventItem[] {
+  return events.map((event) => ({
+    ...event,
+    status: isPastEvent(event.date) ? 'COMPLETED' : event.status,
+  }));
+}
 
 // Seed demo submissions if empty so admin is immediately vibrant and demonstrable
 const SEED_VOLUNTEERS: VolunteerApplication[] = [
@@ -249,6 +267,63 @@ export const StorageManager = {
     if (typeof window !== 'undefined') {
       localStorage.setItem(METRICS_KEY, JSON.stringify(list));
     }
+    return true;
+  },
+
+  // Events managed by the community coordinator in this browser
+  getEvents: (): EventItem[] => {
+    if (typeof window === 'undefined') return updateEventStatuses(UPCOMING_EVENTS);
+    const stored = localStorage.getItem(EVENTS_KEY);
+    let events = UPCOMING_EVENTS;
+    if (stored) {
+      try {
+        events = JSON.parse(stored) as EventItem[];
+      } catch {
+        events = UPCOMING_EVENTS;
+      }
+    }
+    const currentEvents = updateEventStatuses(events);
+    localStorage.setItem(EVENTS_KEY, JSON.stringify(currentEvents));
+    return currentEvents;
+  },
+
+  addEvent: (event: Omit<EventItem, 'id' | 'status'>): EventItem => {
+    const list = StorageManager.getEvents();
+    const newEvent: EventItem = {
+      ...event,
+      id: `event-${Date.now()}`,
+      status: isPastEvent(event.date) ? 'COMPLETED' : 'UPCOMING',
+    };
+    localStorage.setItem(EVENTS_KEY, JSON.stringify([newEvent, ...list]));
+    return newEvent;
+  },
+
+  // Community photo gallery managed by the coordinator
+  getGalleryItems: (): GalleryItem[] => {
+    if (typeof window === 'undefined') return GALLERY_ITEMS;
+    const stored = localStorage.getItem(GALLERY_KEY);
+    if (!stored) {
+      localStorage.setItem(GALLERY_KEY, JSON.stringify(GALLERY_ITEMS));
+      return GALLERY_ITEMS;
+    }
+    try {
+      return JSON.parse(stored) as GalleryItem[];
+    } catch {
+      return GALLERY_ITEMS;
+    }
+  },
+
+  addGalleryItem: (item: Omit<GalleryItem, 'id'>): GalleryItem => {
+    const list = StorageManager.getGalleryItems();
+    const newItem: GalleryItem = { ...item, id: `photo-${Date.now()}` };
+    localStorage.setItem(GALLERY_KEY, JSON.stringify([newItem, ...list]));
+    return newItem;
+  },
+
+  removeGalleryItem: (id: string): boolean => {
+    const list = StorageManager.getGalleryItems();
+    if (!id.startsWith('photo-')) return false;
+    localStorage.setItem(GALLERY_KEY, JSON.stringify(list.filter((item) => item.id !== id)));
     return true;
   },
 

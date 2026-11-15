@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Sparkles,
   Info,
@@ -125,6 +126,9 @@ export default function ImpactPage() {
           
           {/* Card 1: Nutrition & Health */}
           <div className="bg-white rounded-3xl p-6 border border-cream-300 shadow-sm space-y-4">
+            <div className="relative -mx-6 -mt-6 mb-2 aspect-[16/9] overflow-hidden rounded-t-3xl">
+              <Image src="/images/community/img-20260921-wa0008.webp" alt="Community meal shared through an Astha Shakti nutrition program" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+            </div>
             <div className="w-10 h-10 rounded-xl bg-saffron-100 text-saffron-700 flex items-center justify-center">
               <Utensils className="w-5 h-5" />
             </div>
@@ -149,6 +153,9 @@ export default function ImpactPage() {
 
           {/* Card 2: Education & Remedial Learning */}
           <div className="bg-white rounded-3xl p-6 border border-cream-300 shadow-sm space-y-4">
+            <div className="relative -mx-6 -mt-6 mb-2 aspect-[16/9] overflow-hidden rounded-t-3xl">
+              <Image src="/images/community/img-20260921-wa0026.webp" alt="Children taking part in an Astha Shakti learning activity" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+            </div>
             <div className="w-10 h-10 rounded-xl bg-forest-100 text-forest-700 flex items-center justify-center">
               <BookOpen className="w-5 h-5" />
             </div>
@@ -173,6 +180,9 @@ export default function ImpactPage() {
 
           {/* Card 3: Differently-Abled & Women */}
           <div className="bg-white rounded-3xl p-6 border border-cream-300 shadow-sm space-y-4">
+            <div className="relative -mx-6 -mt-6 mb-2 aspect-[16/9] overflow-hidden rounded-t-3xl">
+              <Image src="/images/community/img-20260921-wa0045.webp" alt="Participants at an Astha Shakti inclusion and livelihood activity" fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+            </div>
             <div className="w-10 h-10 rounded-xl bg-marigold-100 text-marigold-700 flex items-center justify-center">
               <HeartHandshake className="w-5 h-5" />
             </div>

@@ -19,10 +19,14 @@ import {
   TrendingUp,
   FileSpreadsheet,
   RefreshCw,
-  LogOut
+  LogOut,
+  Calendar,
+  Image as ImageIcon,
+  Plus,
+  Upload
 } from 'lucide-react';
 import { StorageManager } from '@/lib/storage';
-import { VolunteerApplication, DonationRecord, ContactMessage, ImpactMetric } from '@/lib/types';
+import { VolunteerApplication, DonationRecord, ContactMessage, ImpactMetric, EventItem, GalleryItem } from '@/lib/types';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
 export default function AdminPage() {
@@ -30,13 +34,25 @@ export default function AdminPage() {
   const [passcode, setPasscode] = useState('');
   const [authError, setAuthError] = useState('');
   
-  const [activeTab, setActiveTab] = useState<'volunteers' | 'donations' | 'contacts' | 'metrics'>('volunteers');
+  const [activeTab, setActiveTab] = useState<'volunteers' | 'donations' | 'contacts' | 'metrics' | 'events' | 'gallery'>('volunteers');
   
   // Data States
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
   const [donations, setDonations] = useState<DonationRecord[]>([]);
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [metrics, setMetrics] = useState<ImpactMetric[]>([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [gallery, setGallery] = useState<GalleryItem[]>([]);
+  const [eventPhoto, setEventPhoto] = useState<File | null>(null);
+  const [galleryPhoto, setGalleryPhoto] = useState<File | null>(null);
+  const [contentNotice, setContentNotice] = useState('');
+  const [contentError, setContentError] = useState('');
+  const [eventForm, setEventForm] = useState({
+    title: '', category: 'Volunteer Drives' as EventItem['category'], date: '', time: '', location: '', description: '', seatsTotal: '',
+  });
+  const [galleryForm, setGalleryForm] = useState({
+    title: '', caption: '', category: 'Food Program',
+  });
   
   // Volunteer Filter & Detail View
   const [volStatusFilter, setVolStatusFilter] = useState<string>('All');
@@ -59,6 +75,81 @@ export default function AdminPage() {
     setDonations(StorageManager.getDonations());
     setContacts(StorageManager.getContacts());
     setMetrics(StorageManager.getMetrics());
+    setEvents(StorageManager.getEvents());
+    setGallery(StorageManager.getGalleryItems());
+  };
+
+  const optimizeImageUpload = (file: File): Promise<string> => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Could not read the selected image.'));
+    reader.onload = () => {
+      const image = new window.Image();
+      image.onerror = () => reject(new Error('The selected file is not a valid image.'));
+      image.onload = () => {
+        const scale = Math.min(1, 1400 / Math.max(image.width, image.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(image.width * scale);
+        canvas.height = Math.round(image.height * scale);
+        const context = canvas.getContext('2d');
+        if (!context) return reject(new Error('Image processing is unavailable in this browser.'));
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg', 0.8));
+      };
+      image.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const handleAddEvent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContentError('');
+    setContentNotice('');
+    try {
+      const imageUrl = eventPhoto ? await optimizeImageUpload(eventPhoto) : undefined;
+      StorageManager.addEvent({
+        ...eventForm,
+        seatsTotal: eventForm.seatsTotal ? Number(eventForm.seatsTotal) : undefined,
+        seatsRemaining: eventForm.seatsTotal ? Number(eventForm.seatsTotal) : undefined,
+        imageUrl,
+      });
+      setEventForm({ title: '', category: 'Volunteer Drives', date: '', time: '', location: '', description: '', seatsTotal: '' });
+      setEventPhoto(null);
+      setContentNotice('Event saved. Its status is based on the date you entered.');
+      loadAllData();
+    } catch (error) {
+      setContentError(error instanceof Error ? error.message : 'Could not save the event. Check available browser storage.');
+    }
+  };
+
+  const handleAddPhoto = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContentError('');
+    setContentNotice('');
+    if (!galleryPhoto) {
+      setContentError('Choose a photo to upload.');
+      return;
+    }
+    try {
+      const imageUrl = await optimizeImageUpload(galleryPhoto);
+      StorageManager.addGalleryItem({
+        ...galleryForm,
+        imageUrl,
+        date: new Date().toISOString().slice(0, 10),
+      });
+      setGalleryForm({ title: '', caption: '', category: 'Food Program' });
+      setGalleryPhoto(null);
+      setContentNotice('Photo added to the community gallery.');
+      loadAllData();
+    } catch (error) {
+      setContentError(error instanceof Error ? error.message : 'Could not save the photo. Check available browser storage.');
+    }
+  };
+
+  const handleRemovePhoto = (id: string) => {
+    if (StorageManager.removeGalleryItem(id)) {
+      setContentNotice('Uploaded photo removed from the gallery.');
+      loadAllData();
+    }
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -201,7 +292,7 @@ export default function AdminPage() {
           </form>
 
           <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-[11px] text-amber-800">
-            <strong>Demo Access:</strong> Use passcode <code>astha2026</code> to review volunteer applications, view test donations, and update metrics.
+            <strong>Demo Access:</strong> Use passcode <code>astha2026</code> to manage events and community photos, review submissions, and update metrics.
           </div>
         </div>
       </div>
@@ -221,7 +312,7 @@ export default function AdminPage() {
             Coordinator Dashboard
           </h1>
           <p className="text-xs text-slate-400 mt-0.5">
-            Manage volunteer submissions, donor inquiries, and live homepage impact numbers.
+            Manage volunteer submissions, donor inquiries, events, community photos, and homepage impact numbers.
           </p>
         </div>
 
@@ -341,6 +432,28 @@ export default function AdminPage() {
           }`}
         >
           <TrendingUp className="w-4 h-4" /> Live Impact Counters ({metrics.length})
+        </button>
+
+        <button
+          onClick={() => setActiveTab('events')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 ${
+            activeTab === 'events'
+              ? 'bg-charcoal-900 text-white'
+              : 'bg-white text-charcoal-700 hover:bg-cream-200 border border-cream-300'
+          }`}
+        >
+          <Calendar className="w-4 h-4" /> Events ({events.length})
+        </button>
+
+        <button
+          onClick={() => setActiveTab('gallery')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 ${
+            activeTab === 'gallery'
+              ? 'bg-charcoal-900 text-white'
+              : 'bg-white text-charcoal-700 hover:bg-cream-200 border border-cream-300'
+          }`}
+        >
+          <ImageIcon className="w-4 h-4" /> Photos ({gallery.length})
         </button>
       </div>
 
@@ -645,6 +758,134 @@ export default function AdminPage() {
             ))}
           </div>
         </div>
+      )}
+
+      {activeTab === 'events' && (
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-cream-300 shadow-sm space-y-6">
+          <div className="pb-4 border-b border-cream-200">
+            <h3 className="font-serif font-bold text-xl text-charcoal-900">Community Events</h3>
+            <p className="text-xs text-charcoal-600 mt-1">Add an event with its date and details. Past dates are automatically marked completed and cannot accept registrations.</p>
+          </div>
+
+          <form onSubmit={handleAddEvent} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Event name *</span>
+              <input required value={eventForm.title} onChange={(e) => setEventForm({ ...eventForm, title: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50" placeholder="e.g. Community meal and learning day" />
+            </label>
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Program category *</span>
+              <select value={eventForm.category} onChange={(e) => setEventForm({ ...eventForm, category: e.target.value as EventItem['category'] })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50">
+                <option>Volunteer Drives</option><option>Workshops</option><option>Awareness Programs</option><option>Educational Activities</option><option>Community Events</option>
+              </select>
+            </label>
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Date *</span>
+              <input required type="date" value={eventForm.date} onChange={(e) => setEventForm({ ...eventForm, date: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50" />
+            </label>
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Time *</span>
+              <input required value={eventForm.time} onChange={(e) => setEventForm({ ...eventForm, time: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50" placeholder="e.g. 9:00 AM – 1:00 PM" />
+            </label>
+            <label className="space-y-1 md:col-span-2">
+              <span className="font-bold text-charcoal-800">Location *</span>
+              <input required value={eventForm.location} onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50" placeholder="Venue and area" />
+            </label>
+            <label className="space-y-1 md:col-span-2">
+              <span className="font-bold text-charcoal-800">Description *</span>
+              <textarea required rows={3} value={eventForm.description} onChange={(e) => setEventForm({ ...eventForm, description: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50 resize-y" placeholder="What will happen at this event?" />
+            </label>
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Volunteer capacity (optional)</span>
+              <input type="number" min="1" value={eventForm.seatsTotal} onChange={(e) => setEventForm({ ...eventForm, seatsTotal: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50" placeholder="e.g. 25" />
+            </label>
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Cover photo (optional)</span>
+              <input key={eventPhoto ? eventPhoto.name : 'event-photo-empty'} type="file" accept="image/*" onChange={(e) => setEventPhoto(e.target.files?.[0] ?? null)} className="w-full p-2 rounded-xl border border-cream-300 bg-cream-50" />
+            </label>
+            <div className="md:col-span-2">
+              <button type="submit" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-forest-800 hover:bg-forest-900 text-white font-bold">
+                <Plus className="w-4 h-4" /> Add Event
+              </button>
+            </div>
+          </form>
+
+          {contentNotice && <p role="status" className="rounded-xl bg-forest-50 border border-forest-200 p-3 text-xs text-forest-800">{contentNotice}</p>}
+          {contentError && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 p-3 text-xs text-red-700">{contentError}</p>}
+
+          <div className="space-y-3">
+            <h4 className="font-bold text-sm text-charcoal-900">Posted events ({events.length})</h4>
+            {[...events].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((event) => (
+              <div key={event.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 rounded-2xl border border-cream-200 bg-cream-50">
+                <div>
+                  <p className="font-bold text-sm text-charcoal-900">{event.title}</p>
+                  <p className="text-[11px] text-charcoal-600">{new Date(event.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} · {event.location}</p>
+                </div>
+                <span className={`self-start sm:self-auto px-2.5 py-1 rounded-lg text-[10px] font-bold ${event.status === 'COMPLETED' ? 'bg-cream-200 text-charcoal-700' : 'bg-forest-100 text-forest-800'}`}>{event.status}</span>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-xl p-3">This project currently saves admin changes in this browser. A shared database is needed for updates to appear on other devices and visitors’ browsers.</p>
+        </section>
+      )}
+
+      {activeTab === 'gallery' && (
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-cream-300 shadow-sm space-y-6">
+          <div className="pb-4 border-b border-cream-200">
+            <h3 className="font-serif font-bold text-xl text-charcoal-900">Community Photo Gallery</h3>
+            <p className="text-xs text-charcoal-600 mt-1">Upload a photo, add an accurate caption, and choose the program category. Large photos are resized before saving.</p>
+          </div>
+
+          <form onSubmit={handleAddPhoto} className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Photo title *</span>
+              <input required value={galleryForm.title} onChange={(e) => setGalleryForm({ ...galleryForm, title: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50" placeholder="Short title" />
+            </label>
+            <label className="space-y-1">
+              <span className="font-bold text-charcoal-800">Program category *</span>
+              <select value={galleryForm.category} onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50">
+                <option>Food Program</option><option>Education Program</option><option>Resource Development & Quality Education</option><option>Internship Programs</option><option>COVID-19 Support Initiatives</option><option>Environment Programs</option><option>Felicitation & Recognitions</option><option>Programs for Special Children</option><option>Community Programs</option><option>Community Highlights</option>
+              </select>
+            </label>
+            <label className="space-y-1 md:col-span-2">
+              <span className="font-bold text-charcoal-800">Caption *</span>
+              <textarea required rows={2} value={galleryForm.caption} onChange={(e) => setGalleryForm({ ...galleryForm, caption: e.target.value })} className="w-full p-3 rounded-xl border border-cream-300 bg-cream-50 resize-y" placeholder="Describe what is happening in the photo" />
+            </label>
+            <label className="space-y-1 md:col-span-2">
+              <span className="font-bold text-charcoal-800">Photo file *</span>
+              <input key={galleryPhoto ? galleryPhoto.name : 'gallery-photo-empty'} required type="file" accept="image/*" onChange={(e) => setGalleryPhoto(e.target.files?.[0] ?? null)} className="w-full p-2 rounded-xl border border-cream-300 bg-cream-50" />
+            </label>
+            <div className="md:col-span-2">
+              <button type="submit" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-saffron-600 hover:bg-saffron-700 text-white font-bold">
+                <Upload className="w-4 h-4" /> Add Photo
+              </button>
+            </div>
+          </form>
+
+          {contentNotice && <p role="status" className="rounded-xl bg-forest-50 border border-forest-200 p-3 text-xs text-forest-800">{contentNotice}</p>}
+          {contentError && <p role="alert" className="rounded-xl bg-red-50 border border-red-200 p-3 text-xs text-red-700">{contentError}</p>}
+
+          <p className="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-xl p-3">Photos and event updates are saved to this browser in this project prototype. They will not sync to other devices until a shared backend is connected.</p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {gallery.map((photo) => (
+              <article key={photo.id} className="overflow-hidden rounded-2xl border border-cream-200 bg-white">
+                <div className="relative aspect-square bg-cream-100">
+                  <img src={photo.imageUrl} alt={photo.caption} className="absolute inset-0 w-full h-full object-cover" />
+                </div>
+                <div className="p-3 space-y-1">
+                  <p className="font-bold text-xs text-charcoal-900 line-clamp-1">{photo.title}</p>
+                  <p className="text-[10px] text-charcoal-500 line-clamp-2">{photo.category} · {photo.caption}</p>
+                  {photo.id.startsWith('photo-') && (
+                    <button type="button" onClick={() => handleRemovePhoto(photo.id)} className="inline-flex items-center gap-1 mt-1 text-[10px] font-bold text-red-700 hover:text-red-900">
+                      <Trash2 className="w-3 h-3" /> Remove upload
+                    </button>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Volunteer Application Detail Modal */}

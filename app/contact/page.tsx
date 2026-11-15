@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { ORG_INFO } from '@/lib/data';
 import { StorageManager } from '@/lib/storage';
+import CommunityPhotoFeature from '@/components/CommunityPhotoFeature';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -81,6 +82,12 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <CommunityPhotoFeature
+        src="/images/community/img-20260921-wa0033.webp"
+        alt="Astha Shakti community team meeting"
+        caption="Connect with the team behind Astha Shakti’s community programs."
+      />
 
       {/* Main Grid: Form + Address Info */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -313,7 +320,7 @@ export default function ContactPage() {
                   Open in Google Maps <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
-              <div className="relative aspect-16/9 w-full bg-slate-100">
+              <div className="relative aspect-[16/9] w-full bg-slate-100">
                 <iframe
                   title="Astha Shakti Location Map"
                   src="https://maps.google.com/maps?q=JP%20Nagar%206th%20Phase,%20Bengaluru&t=&z=14&ie=UTF8&iwloc=&output=embed"

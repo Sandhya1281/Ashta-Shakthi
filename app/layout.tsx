@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Astha Shakti",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80",
+        url: "https://asthashakti.org/images/community/img-20260921-wa0008.webp",
         width: 1200,
         height: 630,
         alt: "Astha Shakti Nutri-Ed Child Nutrition & Learning",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Astha Shakti | Nutrition, Education & Social Empowerment",
     description: "Supporting underprivileged children and communities in Bengaluru.",
-    images: ["https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1200&q=80"],
+    images: ["https://asthashakti.org/images/community/img-20260921-wa0008.webp"],
   },
   robots: {
     index: true,

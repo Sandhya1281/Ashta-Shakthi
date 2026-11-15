@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { StorageManager } from '@/lib/storage';
 import confetti from 'canvas-confetti';
+import CommunityPhotoFeature from '@/components/CommunityPhotoFeature';
 
 const INTEREST_AREAS = [
   'Teaching',
@@ -150,6 +151,12 @@ export default function VolunteerPage() {
           </div>
         </div>
       </section>
+
+      <CommunityPhotoFeature
+        src="/images/community/img-20260921-wa0010.webp"
+        alt="Volunteer Eveline from Australia taking part in an Astha Shakti activity"
+        caption="Volunteers bring their time, skills, and care to the community."
+      />
 
       {/* Main Form Container */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

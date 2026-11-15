@@ -84,10 +84,10 @@ export default function NutriEdPage() {
           </div>
 
           <div className="lg:col-span-6">
-            <div className="relative aspect-4/3 w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+            <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
               <Image
-                src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1000&q=80"
-                alt="Children happily eating and studying in Nutri-Ed program"
+                src="/images/community/img-20260921-wa0008.webp"
+                alt="Community members serving a meal in an Astha Shakti program photo"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"

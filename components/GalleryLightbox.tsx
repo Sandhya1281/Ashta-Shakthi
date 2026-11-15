@@ -8,10 +8,7 @@ import {
   ChevronRight,
   Maximize2,
   Filter,
-  MapPin,
-  Calendar,
-  Sparkles,
-  Info
+  MapPin
 } from 'lucide-react';
 
 interface GalleryLightboxProps {
@@ -19,20 +16,10 @@ interface GalleryLightboxProps {
   initialCategory?: string;
 }
 
-const CATEGORIES = [
-  'All',
-  'Nutrition',
-  'Education',
-  'Volunteers',
-  'Events',
-  'Skill Development',
-  'Children',
-  'Community Programs'
-];
-
 export default function GalleryLightbox({ items, initialCategory = 'All' }: GalleryLightboxProps) {
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const categories = ['All', ...Array.from(new Set(items.map((item) => item.category))).sort()];
 
   const filteredItems = activeCategory === 'All'
     ? items
@@ -70,7 +57,7 @@ export default function GalleryLightbox({ items, initialCategory = 'All' }: Gall
         <span className="text-xs font-bold text-charcoal-500 uppercase tracking-wider flex items-center gap-1 shrink-0 mr-1">
           <Filter className="w-3.5 h-3.5 text-saffron-600" /> Filter:
         </span>
-        {CATEGORIES.map((cat) => {
+        {categories.map((cat) => {
           const isActive = activeCategory === cat;
           return (
             <button
@@ -100,10 +87,10 @@ export default function GalleryLightbox({ items, initialCategory = 'All' }: Gall
             className="group relative bg-white rounded-3xl overflow-hidden border border-cream-300 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col justify-between"
           >
             {/* Image Box */}
-            <div className="relative aspect-4/3 w-full overflow-hidden bg-slate-100">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
               <Image
                 src={item.imageUrl}
-                alt={item.title}
+                alt={item.caption}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -136,7 +123,7 @@ export default function GalleryLightbox({ items, initialCategory = 'All' }: Gall
                     <MapPin className="w-3 h-3 text-saffron-600" /> {item.location}
                   </span>
                 )}
-                <span>{item.date}</span>
+                {item.date && <span>{item.date}</span>}
               </div>
             </div>
           </div>
@@ -197,7 +184,7 @@ export default function GalleryLightbox({ items, initialCategory = 'All' }: Gall
             <div className="relative w-full h-[60vh] max-h-[600px] rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src={currentItem.imageUrl}
-                alt={currentItem.title}
+                alt={currentItem.caption}
                 fill
                 className="object-contain"
                 priority
@@ -217,7 +204,7 @@ export default function GalleryLightbox({ items, initialCategory = 'All' }: Gall
                     <MapPin className="w-3 h-3 text-saffron-400" /> {currentItem.location}
                   </span>
                 )}
-                <span>Year: {currentItem.date}</span>
+                {currentItem.date && <span>Year: {currentItem.date}</span>}
                 <span className="text-slate-500 italic ml-auto">
                   Use ← and → arrows to browse photos
                 </span>

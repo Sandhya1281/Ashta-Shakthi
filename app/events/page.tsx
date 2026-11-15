@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   Calendar,
@@ -11,12 +11,12 @@ import {
   X,
   AlertCircle
 } from 'lucide-react';
-import { UPCOMING_EVENTS } from '@/lib/data';
 import { EventItem } from '@/lib/types';
 import { StorageManager } from '@/lib/storage';
 import confetti from 'canvas-confetti';
 
 export default function EventsPage() {
+  const [events, setEvents] = useState<EventItem[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -26,6 +26,13 @@ export default function EventsPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    setEvents(StorageManager.getEvents());
+  }, []);
+
+  const orderedEvents = [...events].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const upcomingCount = events.filter((event) => event.status !== 'COMPLETED').length;
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,13 +76,13 @@ export default function EventsPage() {
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-100 text-forest-900 text-xs font-bold">
               <Calendar className="w-3.5 h-3.5 text-forest-700" />
-              Upcoming Community Engagements
+              Community Calendar
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-black text-charcoal-950 tracking-tight">
               Events & Volunteer Drives
             </h1>
             <p className="text-base sm:text-lg text-charcoal-700 leading-relaxed">
-              Participate directly in our weekend Nutri-Ed meal distributions, inclusive creative workshops, and community health camps across Bengaluru.
+              Browse past drives and upcoming activities. Completed events stay in the archive, and registration is available only for future events.
             </p>
           </div>
         </div>
@@ -83,25 +90,36 @@ export default function EventsPage() {
 
       {/* Events List Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {upcomingCount === 0 && (
+          <div className="mb-8 rounded-2xl border border-cream-300 bg-cream-50 p-5 text-sm text-charcoal-700">
+            No upcoming events are posted right now. Please check back for new dates.
+          </div>
+        )}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {UPCOMING_EVENTS.map((event) => (
+          {orderedEvents.map((event) => (
             <div
               key={event.id}
               className="bg-white rounded-3xl overflow-hidden border border-cream-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100">
-                  <Image
-                    src={event.imageUrl}
-                    alt={event.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                  />
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
+                  {event.imageUrl ? (
+                    <Image
+                      src={event.imageUrl}
+                      alt={event.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-cream-200 via-cream-100 to-forest-100">
+                      <Calendar className="w-10 h-10 text-forest-700/60" />
+                    </div>
+                  )}
                   <span className="absolute top-3 left-3 bg-charcoal-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full backdrop-blur-xs">
                     {event.category}
                   </span>
-                  <span className="absolute bottom-3 right-3 bg-forest-700 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-lg shadow-sm">
+                  <span className={`absolute bottom-3 right-3 ${event.status === 'COMPLETED' ? 'bg-charcoal-800' : 'bg-forest-700'} text-white text-[11px] font-bold px-2.5 py-0.5 rounded-lg shadow-sm`}>
                     {event.status}
                   </span>
                 </div>
@@ -114,7 +132,7 @@ export default function EventsPage() {
                   <div className="space-y-2 text-xs text-charcoal-600 bg-cream-50 p-4 rounded-2xl border border-cream-200">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-3.5 h-3.5 text-saffron-600 shrink-0" />
-                      <span className="font-semibold text-charcoal-800">{event.date}</span>
+                      <span className="font-semibold text-charcoal-800">{new Date(event.date).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="w-3.5 h-3.5 text-marigold-600 shrink-0" />
@@ -130,7 +148,7 @@ export default function EventsPage() {
                     {event.description}
                   </p>
 
-                  {event.seatsRemaining !== undefined && (
+                  {event.status !== 'COMPLETED' && event.seatsRemaining !== undefined && (
                     <div className="flex items-center justify-between text-[11px] text-charcoal-500 pt-2 border-t border-cream-200">
                       <span className="flex items-center gap-1 font-semibold text-saffron-700">
                         <Users className="w-3.5 h-3.5" /> {event.seatsRemaining} Volunteer Spots Left
@@ -141,14 +159,22 @@ export default function EventsPage() {
                 </div>
               </div>
 
-              <div className="px-6 pb-6 pt-2">
-                <button
-                  onClick={() => setSelectedEvent(event)}
-                  className="w-full py-3 px-4 rounded-xl bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
-                >
-                  <span>Register for Event</span>
-                </button>
-              </div>
+              {event.status === 'COMPLETED' ? (
+                <div className="px-6 pb-6 pt-2">
+                  <span className="w-full py-3 px-4 rounded-xl bg-cream-200 text-charcoal-600 text-xs font-bold flex items-center justify-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" /> Event Completed
+                  </span>
+                </div>
+              ) : (
+                <div className="px-6 pb-6 pt-2">
+                  <button
+                    onClick={() => setSelectedEvent(event)}
+                    className="w-full py-3 px-4 rounded-xl bg-saffron-600 hover:bg-saffron-700 text-white text-xs font-bold transition-all shadow-md flex items-center justify-center gap-2"
+                  >
+                    <span>Register for Event</span>
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

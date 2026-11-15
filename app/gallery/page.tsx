@@ -1,11 +1,11 @@
 import React from 'react';
-import { Camera, Sparkles, Image as ImageIcon } from 'lucide-react';
-import GalleryLightbox from '@/components/GalleryLightbox';
+import { Camera } from 'lucide-react';
+import ManagedGalleryLightbox from '@/components/ManagedGalleryLightbox';
 import { GALLERY_ITEMS } from '@/lib/data';
 
 export const metadata = {
   title: 'Photo & Video Gallery | Astha Shakti Bengaluru',
-  description: 'Visual chronicles of our Nutri-Ed meal distributions, joyful classrooms, volunteer activities, and community programs.',
+  description: 'Photos shared by Astha Shakti, organized by food, education, internships, COVID-19 support, environment, and community programs.',
 };
 
 export default function GalleryPage() {
@@ -24,7 +24,7 @@ export default function GalleryPage() {
               Astha Shakti Gallery
             </h1>
             <p className="text-base sm:text-lg text-charcoal-700 leading-relaxed">
-              Explore authentic moments from our Bengaluru learning centers, hot meal sessions, vocational workshops, and community events. Click any photo to view in high-resolution lightbox.
+              Browse photos shared by Astha Shakti, organized across food, education, internships, COVID-19 support, environment programs, recognition, and community activities. Select a photo to view it larger.
             </p>
           </div>
         </div>
@@ -32,7 +32,7 @@ export default function GalleryPage() {
 
       {/* Gallery Filter & Grid Container */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <GalleryLightbox items={GALLERY_ITEMS} initialCategory="All" />
+        <ManagedGalleryLightbox initialItems={GALLERY_ITEMS} />
       </section>
 
     </div>

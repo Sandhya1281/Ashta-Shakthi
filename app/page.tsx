@@ -22,7 +22,7 @@ import {
 import ImpactCounters from '@/components/ImpactCounters';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
 import InstagramFeed from '@/components/InstagramFeed';
-import GalleryLightbox from '@/components/GalleryLightbox';
+import ManagedGalleryLightbox from '@/components/ManagedGalleryLightbox';
 import {
   ORG_INFO,
   WORK_AREAS,
@@ -37,11 +37,20 @@ export default function HomePage() {
     <div className="space-y-16 sm:space-y-24">
       
       {/* 1. HERO SECTION */}
-      <section className="relative pt-6 sm:pt-10 pb-16 sm:pb-24 overflow-hidden bg-gradient-to-b from-cream-200/80 via-cream-100 to-cream-100">
+      <section className="relative pt-6 sm:pt-10 pb-16 sm:pb-24 overflow-hidden bg-cream-100">
+        <Image
+          src="/images/community/img-20260921-wa0008.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center opacity-40"
+        />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-b from-cream-100/75 via-cream-100/75 to-cream-100/70 lg:bg-gradient-to-r lg:from-cream-100/95 lg:via-cream-100/80 lg:to-cream-100/45 pointer-events-none" />
         {/* Subtle decorative background circles */}
         <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-r from-saffron-300/15 via-marigold-200/20 to-forest-200/15 rounded-full blur-3xl -z-10 pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
             {/* Left Content (7 cols) */}
@@ -102,35 +111,9 @@ export default function HomePage() {
 
             </div>
 
-            {/* Right Hero Visual & Floating Impact Card (5 cols) */}
-            <div className="lg:col-span-5 relative flex justify-center">
-              
-              <div className="relative w-full max-w-md lg:max-w-none">
-                {/* Main Hero Image Container */}
-                <div className="relative aspect-4/5 w-full rounded-3xl overflow-hidden shadow-2xl border-4 border-white shadow-saffron-950/10">
-                  <Image
-                    src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1000&q=80"
-                    alt="Children happily learning and receiving nutritious food at Astha Shakti"
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/70 via-charcoal-950/10 to-transparent" />
-                  
-                  {/* Overlay text on image */}
-                  <div className="absolute bottom-4 left-4 right-4 text-white p-2">
-                    <p className="font-serif font-bold text-sm sm:text-base text-white drop-shadow-md">
-                      Nutri-Ed Learning Centers • Bengaluru
-                    </p>
-                    <p className="text-xs text-cream-200/90 drop-shadow-xs">
-                      Unlocking child potential through nutrition and care.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Floating Impact Card: "Nutrition + Education = Opportunity" */}
-                <div className="absolute -bottom-6 -left-4 sm:-left-8 bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-xl border border-cream-300 max-w-[280px] sm:max-w-[310px] animate-pulse-subtle">
+            {/* Supporting card over the single photo background */}
+            <div className="lg:col-span-5 relative flex min-h-[170px] lg:min-h-[400px] items-end justify-center lg:justify-start">
+                <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-xl border border-cream-300 max-w-[310px]">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-forest-100 flex items-center justify-center shrink-0">
                       <Sparkles className="w-5 h-5 text-forest-700" />
@@ -146,14 +129,10 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Floating Badge Top Right */}
-                <div className="absolute -top-4 -right-4 bg-saffron-600 text-white rounded-2xl px-3.5 py-2 shadow-lg flex items-center gap-1.5 text-xs font-bold">
+                <div className="absolute top-3 right-2 lg:top-8 lg:right-4 bg-saffron-600 text-white rounded-2xl px-3.5 py-2 shadow-lg flex items-center gap-1.5 text-xs font-bold">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Est. 2009</span>
                 </div>
-
-              </div>
-
             </div>
 
           </div>
@@ -228,10 +207,10 @@ export default function HomePage() {
 
             {/* Right Visual / Milestone Timeline preview (5 cols) */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="relative aspect-4/3 w-full rounded-3xl overflow-hidden shadow-md border border-cream-300">
+              <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-md border border-cream-300">
                 <Image
-                  src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80"
-                  alt="Classroom learning at Astha Shakti"
+                  src="/images/community/img-20260921-wa0023.webp"
+                  alt="Community members taking part in an Astha Shakti program"
                   fill
                   sizes="(max-width: 768px) 100vw, 40vw"
                   className="object-cover"
@@ -347,7 +326,7 @@ export default function HomePage() {
             >
               <div>
                 {/* Image */}
-                <div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
                   <Image
                     src={area.imageUrl}
                     alt={area.title}
@@ -428,7 +407,7 @@ export default function HomePage() {
                 className="bg-white rounded-3xl overflow-hidden border border-cream-300 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
                     <Image
                       src={story.imageUrl}
                       alt={story.title}
@@ -492,7 +471,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <GalleryLightbox items={GALLERY_ITEMS.slice(0, 4)} />
+        <ManagedGalleryLightbox initialItems={GALLERY_ITEMS} limit={4} />
       </section>
 
       {/* 8. YOUTUBE VIDEO SECTION (Requirement #12) */}

@@ -18,6 +18,7 @@ import { StorageManager } from '@/lib/storage';
 import { DonationRecord } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import ReceiptModal from '@/components/ReceiptModal';
+import CommunityPhotoFeature from '@/components/CommunityPhotoFeature';
 import confetti from 'canvas-confetti';
 
 const CAUSES = [
@@ -132,6 +133,12 @@ export default function DonatePage() {
           </div>
         </div>
       </section>
+
+      <CommunityPhotoFeature
+        src="/images/community/img-20260921-wa0008.webp"
+        alt="Community members sharing a meal during an Astha Shakti program"
+        caption="Community meals and learning are supported by people who give."
+      />
 
       {/* Main Donation Container */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

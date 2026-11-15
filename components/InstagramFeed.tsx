@@ -1,33 +1,33 @@
 import React from 'react';
 import Image from 'next/image';
-import { Instagram, ExternalLink, Heart, MessageCircle } from 'lucide-react';
+import { Instagram, ExternalLink } from 'lucide-react';
 import { ORG_INFO } from '@/lib/data';
 
-const INSTA_POSTS = [
+const COMMUNITY_PHOTOS = [
   {
-    id: 'p1',
-    image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80',
-    caption: 'Every meal shared is a step closer to consistent education. #NutriEd #AsthaShakti #BengaluruNGO',
-    likes: 'Verified',
+    id: 'food',
+    image: '/images/community/img-20260921-wa0008.webp',
+    category: 'Food Program',
+    caption: 'Community members serving a meal at an Astha Shakti program.',
   },
   {
-    id: 'p2',
-    image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80',
-    caption: 'Weekend storytelling circles with our wonderful volunteers in JP Nagar. #ChildEducation #VolunteerBengaluru',
-    likes: 'Verified',
+    id: 'education',
+    image: '/images/community/img-20260921-wa0020.webp',
+    category: 'Education Program',
+    caption: 'Children gathered for an outdoor learning activity.',
   },
   {
-    id: 'p3',
-    image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80',
-    caption: 'Inclusive art and sensory fun! Celebrating every child’s unique creativity. #DifferentlyAbled #Inclusion',
-    likes: 'Verified',
+    id: 'internship',
+    image: '/images/community/img-20260921-wa0010.webp',
+    category: 'Internship Programs',
+    caption: 'Astha Shakti volunteer Eveline, visiting from Australia.',
   },
   {
-    id: 'p4',
-    image: 'https://images.unsplash.com/photo-1609137144822-0d1217e94e50?auto=format&fit=crop&w=600&q=80',
-    caption: 'Empowering mothers with tailoring & livelihood skills for household resilience. #WomenEmpowerment',
-    likes: 'Verified',
-  }
+    id: 'special-children',
+    image: '/images/community/img-20260921-wa0045.webp',
+    category: 'Programs for Special Children',
+    caption: 'A volunteer works alongside a child during a community activity.',
+  },
 ];
 
 export default function InstagramFeed() {
@@ -43,10 +43,10 @@ export default function InstagramFeed() {
               @asthashakti8
             </div>
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-charcoal-900">
-              Follow Our Journey on Instagram
+              Moments from Astha Shakti
             </h2>
             <p className="text-sm text-charcoal-600 mt-1 max-w-xl">
-              Stay connected with daily photos, community stories, and field milestones from our Bengaluru centers.
+              Photos shared by Astha Shakti, featuring meals, learning activities, volunteers, and inclusive programs.
             </p>
           </div>
 
@@ -63,42 +63,33 @@ export default function InstagramFeed() {
 
         {/* Post Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {INSTA_POSTS.map((post) => (
-            <a
-              key={post.id}
-              href={ORG_INFO.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
+          {COMMUNITY_PHOTOS.map((photo) => (
+            <article
+              key={photo.id}
               className="group relative bg-white rounded-3xl overflow-hidden border border-cream-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
             >
               <div className="relative aspect-square w-full overflow-hidden bg-slate-100">
                 <Image
-                  src={post.image}
-                  alt="Astha Shakti Instagram post"
+                  src={photo.image}
+                  alt={photo.caption}
                   fill
                   sizes="(max-width: 768px) 100vw, 25vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-charcoal-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 text-white">
-                  <span className="flex items-center gap-1 font-bold text-xs">
-                    <Heart className="w-4 h-4 fill-white" /> Astha Shakti
-                  </span>
-                  <span className="flex items-center gap-1 text-xs">
-                    <ExternalLink className="w-4 h-4" /> View Post
-                  </span>
-                </div>
+                <span className="absolute top-3 left-3 bg-charcoal-900/80 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full backdrop-blur-xs">
+                  {photo.category}
+                </span>
               </div>
 
               <div className="p-4 flex-1 flex flex-col justify-between">
                 <p className="text-xs text-charcoal-700 line-clamp-2 leading-relaxed">
-                  {post.caption}
+                  {photo.caption}
                 </p>
                 <div className="mt-3 pt-2 border-t border-cream-200 flex items-center justify-between text-[11px] text-saffron-700 font-semibold">
-                  <span>View on Instagram</span>
-                  <span>↗</span>
+                  <span>Astha Shakti photo</span>
                 </div>
               </div>
-            </a>
+            </article>
           ))}
         </div>
 

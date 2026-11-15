@@ -40,7 +40,7 @@ export default function StoriesPage() {
               className="bg-white rounded-3xl overflow-hidden border border-cream-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className="relative aspect-16/10 w-full overflow-hidden bg-slate-100">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
                   <Image
                     src={story.imageUrl}
                     alt={story.title}

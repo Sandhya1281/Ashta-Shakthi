@@ -72,17 +72,17 @@ export default function AboutPage() {
           </div>
 
           <div className="lg:col-span-6 space-y-4">
-            <div className="relative aspect-4/3 w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+            <div className="relative aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
               <Image
-                src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1000&q=80"
-                alt="Children learning in Astha Shakti classroom"
+                src="/images/community/img-20260921-wa0020.webp"
+                alt="Children gathered for a learning activity in a photo shared by Astha Shakti"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
             <p className="text-xs text-charcoal-500 italic text-center">
-              Learning sessions conducted with individual attention and nurturing guidance.
+              A learning activity from the photos shared by Astha Shakti.
             </p>
           </div>
 

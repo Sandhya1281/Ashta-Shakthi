@@ -75,7 +75,7 @@ export default function StoryDetailPage({ params }: StoryPageProps) {
         </div>
 
         {/* Featured Image */}
-        <div className="relative aspect-16/9 w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+        <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden shadow-xl border-4 border-white">
           <Image
             src={story.imageUrl}
             alt={story.title}

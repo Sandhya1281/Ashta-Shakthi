@@ -1,4 +1,5 @@
 import { ImpactMetric, Story, GalleryItem, EventItem } from './types';
+import { COMMUNITY_GALLERY_ITEMS } from './community-gallery';
 
 export const ORG_INFO = {
   name: "Astha Shakti",
@@ -16,8 +17,8 @@ export const ORG_INFO = {
   contact: {
     email: "contact@asthashakti.org",
     displayEmail: "contact@asthashakti.org (Official contact to be verified)",
-    phone: "+91 98450 00000",
-    displayPhone: "+91 (Bengaluru Office - Editable)",
+    phone: "+918553018491",
+    displayPhone: "85530 18491",
     hours: "Monday – Saturday: 9:30 AM – 6:00 PM IST",
   },
   social: {
@@ -87,7 +88,7 @@ export const WORK_AREAS = [
     iconName: 'Utensils',
     color: 'saffron',
     link: '/nutri-ed',
-    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/community/img-20260921-wa0006.webp',
     points: [
       'Daily wholesome breakfast & hot lunch',
       'Regular micro-nutrient & health monitoring',
@@ -103,7 +104,7 @@ export const WORK_AREAS = [
     iconName: 'BookOpen',
     color: 'forest',
     link: '/our-work#education',
-    imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/community/img-20260921-wa0026.webp',
     points: [
       'Remedial math, science and languages',
       'Notebooks, bags & stationery kits',
@@ -119,7 +120,7 @@ export const WORK_AREAS = [
     iconName: 'HeartHandshake',
     color: 'marigold',
     link: '/our-work#differently-abled',
-    imageUrl: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/community/img-20260921-wa0024.webp',
     points: [
       'Specialized individualized education plans',
       'Adaptive motor skills & craft sessions',
@@ -135,7 +136,7 @@ export const WORK_AREAS = [
     iconName: 'Sparkles',
     color: 'saffron',
     link: '/our-work#skills',
-    imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/community/img-20260921-wa0029.webp',
     points: [
       'Tailoring, embroidery & sustainable crafting',
       'Basic digital tools & workplace readiness',
@@ -151,7 +152,7 @@ export const WORK_AREAS = [
     iconName: 'Users',
     color: 'forest',
     link: '/our-work#women',
-    imageUrl: 'https://images.unsplash.com/photo-1609137144822-0d1217e94e50?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/community/img-20260921-wa0034.webp',
     points: [
       'Livelihood & handicraft production groups',
       'Maternal health & child nutrition workshops',
@@ -167,7 +168,7 @@ export const WORK_AREAS = [
     iconName: 'ShieldCheck',
     color: 'marigold',
     link: '/our-work#community',
-    imageUrl: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=800&q=80',
+    imageUrl: '/images/community/img-20260921-wa0041.webp',
     points: [
       'Dry ration kits for vulnerable households',
       'General health & vision screening drives',
@@ -250,8 +251,8 @@ export const STORIES: Story[] = [
     ],
     quote: 'When my stomach does not hurt with hunger, I can remember all the stories my teacher reads to us.',
     quoteAuthor: 'Young Beneficiary (Name anonymized for privacy)',
-    imageUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80',
-    imageCaption: 'Children engaged during an interactive reading session after morning nutrition.',
+    imageUrl: '/images/community/img-20260921-wa0020.webp',
+    imageCaption: 'Children gathered for a community learning activity shared by Astha Shakti.',
     publishedDate: 'August 2024',
     isPlaceholderDetail: true
   },
@@ -275,8 +276,8 @@ export const STORIES: Story[] = [
     ],
     quote: 'Seeing the bright smiles of these children when they finish an artwork with their own hands is our greatest reward.',
     quoteAuthor: 'Community Volunteer Educator',
-    imageUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=900&q=80',
-    imageCaption: 'Sensory clay modeling and collaborative painting workshop in progress.',
+    imageUrl: '/images/community/img-20260921-wa0025.webp',
+    imageCaption: 'Children taking part in a group activity shared by Astha Shakti.',
     publishedDate: 'October 2024',
     isPlaceholderDetail: true
   },
@@ -300,87 +301,14 @@ export const STORIES: Story[] = [
     ],
     quote: 'Now I can contribute to buying schoolbooks for my daughter without taking emergency high-interest loans.',
     quoteAuthor: 'Workshop Participant (Verified placeholder quote)',
-    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80',
-    imageCaption: 'Women collaborating on handcrafted textile products and tailoring.',
+    imageUrl: '/images/community/img-20260921-wa0019.webp',
+    imageCaption: 'A community display of handmade and learning materials shared by Astha Shakti.',
     publishedDate: 'November 2024',
     isPlaceholderDetail: true
   }
 ];
 
-export const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    id: 'g1',
-    title: 'Daily Nutri-Ed Morning Meal Distribution',
-    caption: 'Children receiving freshly prepared, protein-packed warm meals before starting classroom lessons.',
-    category: 'Nutrition',
-    imageUrl: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'Bengaluru Center'
-  },
-  {
-    id: 'g2',
-    title: 'Interactive Classroom Learning Session',
-    caption: 'Volunteer mentors teaching foundational mathematics and storytelling in small peer groups.',
-    category: 'Education',
-    imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'JP Nagar Center'
-  },
-  {
-    id: 'g3',
-    title: 'Creative Art & Sensory Workshop',
-    caption: 'Differently-abled children exploring colorful painting and fine motor coordination.',
-    category: 'Children',
-    imageUrl: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'Inclusive Care Wing'
-  },
-  {
-    id: 'g4',
-    title: 'Volunteer Orientation & Community Drive',
-    caption: 'Passionate student and working professional volunteers preparing learning kits and nutrition hampers.',
-    category: 'Volunteers',
-    imageUrl: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'South Bengaluru'
-  },
-  {
-    id: 'g5',
-    title: 'Women Livelihood & Tailoring Cohort',
-    caption: 'Mothers participating in sewing, embroidery and sustainable handicraft production.',
-    category: 'Skill Development',
-    imageUrl: 'https://images.unsplash.com/photo-1609137144822-0d1217e94e50?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'Community Skill Hub'
-  },
-  {
-    id: 'g6',
-    title: 'Community Health & Vision Screening Camp',
-    caption: 'Free pediatric health check-ups and nutritional growth monitoring for neighborhood families.',
-    category: 'Community Programs',
-    imageUrl: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'Rose Garden Area'
-  },
-  {
-    id: 'g7',
-    title: 'Joyful Childhood Smiles',
-    caption: 'Nurturing an environment where every child feels seen, protected, and inspired to reach their potential.',
-    category: 'Children',
-    imageUrl: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'Learning Center'
-  },
-  {
-    id: 'g8',
-    title: 'Annual Youth Sports & Team Day',
-    caption: 'Encouraging physical agility, sportsmanship, and teamwork through outdoor games.',
-    category: 'Events',
-    imageUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80',
-    date: '2024',
-    location: 'Playfield Bengaluru'
-  }
-];
+export const GALLERY_ITEMS: GalleryItem[] = COMMUNITY_GALLERY_ITEMS;
 
 export const UPCOMING_EVENTS: EventItem[] = [
   {
@@ -393,8 +321,8 @@ export const UPCOMING_EVENTS: EventItem[] = [
     description: 'Join our team to serve wholesome morning meals, conduct reading circles, and organize learning games for over 80 children.',
     seatsTotal: 25,
     seatsRemaining: 8,
-    imageUrl: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&w=800&q=80',
-    status: 'UPCOMING'
+    imageUrl: '/images/community/img-20260921-wa0008.webp',
+    status: 'COMPLETED'
   },
   {
     id: 'ev-2',
@@ -406,8 +334,8 @@ export const UPCOMING_EVENTS: EventItem[] = [
     description: 'A dedicated day of tactile clay sculpting, watercolor painting, and rhythm games designed for differently-abled young creators.',
     seatsTotal: 20,
     seatsRemaining: 5,
-    imageUrl: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80',
-    status: 'UPCOMING'
+    imageUrl: '/images/community/img-20260921-wa0045.webp',
+    status: 'COMPLETED'
   },
   {
     id: 'ev-3',
@@ -419,8 +347,8 @@ export const UPCOMING_EVENTS: EventItem[] = [
     description: 'Pediatric check-ups, dietary counseling for mothers, distribution of hygiene kits, and awareness talks on balanced child nutrition.',
     seatsTotal: 30,
     seatsRemaining: 14,
-    imageUrl: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80',
-    status: 'UPCOMING'
+    imageUrl: '/images/community/img-20260921-wa0036.webp',
+    status: 'COMPLETED'
   }
 ];
 
